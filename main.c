@@ -20,11 +20,11 @@ int main()
             free(fileName);
             break;
         case 2: 
-            char *fileName = writeFileName();
+            char *fileName = writeFileName(fileName);
             writeFile(fileName);
             break;
         case 3:
-            char *fileName = writeFileName();
+            char *fileName = writeFileName(fileName);
             alterFile(fileName);
             break;
         default:
@@ -74,7 +74,7 @@ void writeFile(char *fileName){
 }
 
 void alterFile(char *fileName){
-    FILE *file = fopen(fileName, "w");
+    FILE *file = fopen(fileName, "a");
     
     if(file == NULL){
         printf("open file error");
