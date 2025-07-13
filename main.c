@@ -9,7 +9,7 @@ int main()
     void alterFile();
     char* writeFileName();
     
-    printf("Do you want read[1], write[2] or  alter[3] the file csv?");
+    printf("Do you want read[1], write[2] or  alter[3] the file csv? :)");
     int answ;
     scanf("%i", &answ);
     
@@ -73,7 +73,20 @@ void writeFile(char *fileName){
     return 0;
 }
 
-void alterFile(){
+void alterFile(char *fileName){
+    FILE *file = fopen(fileName, "w");
+    
+    if(file == NULL){
+        printf("open file error");
+        return 0;
+    }
+    
+    char x[500];
+    printf("Write: \n");
+    fgets(x, sizeof(x), stdin);
+
+
+    return 0;
     
 }
 
