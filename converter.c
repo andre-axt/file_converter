@@ -1,9 +1,51 @@
 #include <stdio.h>
-#include "fileutils.h";
+#include <stdlib.h>
+#include "fileutils.h"
 
-void TXTtoXLS() {
-    FILE* arq1;
-    FILE* arq2;
+int TXTtoCSV(const char *in, const char *out) {
+    FILE* filein = fopen(in, "r");
+    FILE* fileout = fopen(out, "w");
     
+    if(filein == NULL || fileout == NULL){
+        perror("open file error");
+        return 1;
+    }
+
+    char c;
+    while ((c = fgetc(filein)) != EOF) {
+        if(c == ' '){
+            fputc('\t', fileout);
+        }else{
+            fputc(c, fileout);
+        }
+    }
+
+    fclose(in);
+    fclose(out);
+    return 0;
+
+}
+
+int TXTtoTSV(const char *in, const char *out) {
+    FILE* filein = fopen(in, "r");
+    FILE* fileout = fopen(out, "w");
+    
+    if(filein == NULL || fileout == NULL){
+        perror("open file error");
+        return 1;
+    }
+
+    char c;
+    while ((c = fgetc(filein)) != EOF) {
+        if(c == ' '){
+            fputc('\t', fileout);
+        }else{
+            fputc(c, fileout);
+        }
+    }
+
+    fclose(filein);
+    fclose(fileout);
+    return 0;
 
 }
