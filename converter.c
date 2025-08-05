@@ -14,7 +14,7 @@ int TXTtoCSV(const char *in, const char *out) {
     char c;
     while ((c = fgetc(filein)) != EOF) {
         if(c == ' '){
-            fputc('\t', fileout);
+            fputc(',', fileout);
         }else{
             fputc(c, fileout);
         }
