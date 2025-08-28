@@ -6,15 +6,16 @@ void writeFile(char *fileName){
     
     if(file == NULL){
         printf("open file error");
-        return 0;
+        return;
     }
     
     char x[500];
     printf("Write: \n");
     fgets(x, sizeof(x), stdin);
+    fprintf(file, "%s", x);
 
 
-    return 0;
+    fclose(file);
 }
 
 unsigned int strpspn(const char *x, const char *y){

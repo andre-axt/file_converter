@@ -20,8 +20,8 @@ int TXTtoCSV(const char *in, const char *out) {
         }
     }
 
-    fclose(in);
-    fclose(out);
+    fclose(filein);
+    fclose(fileout);
     return 0;
 
 }

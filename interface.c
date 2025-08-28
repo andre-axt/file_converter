@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include "converter.h"
 
 static void inline activate (GtkApplication *app, gpointer user_data){
 
@@ -12,7 +13,7 @@ static void inline activate (GtkApplication *app, gpointer user_data){
 
 }
 
-int mainInterface (int argc, char **argv){
+int main (int argc, char **argv){
 
     GtkApplication *app;
     int status;
