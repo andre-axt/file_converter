@@ -10,7 +10,13 @@ static GtkWidget *tsv_button;
 static void update_file_label(const char *filename) {
     char label_text[256];
     if (filename) {
+        char *filename_copy = g_strdup(filename);
+        char *last_dot = strrchr(filename_copy, '.');
+        if (last_dot != NULL) {
+            *last_dot = '\0';
+        }
         snprintf(label_text, sizeof(label_text), "Selected file: %s", filename);
+        g_free(filename_copy);
     } else {
         strcpy(label_text, "No file selected");
     }
