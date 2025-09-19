@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "converter.h"
+#include "fileutils.h"
 #include <string.h>
 
 static char *input_file_path = NULL;
@@ -11,13 +12,7 @@ static GtkWidget *txt_button;
 static void update_file_label(const char *filename) {
     char label_text[256];
     if (filename) {
-        char *filename_copy = g_strdup(filename);
-        char *last_dot = strrchr(filename_copy, '.');
-        if (last_dot != NULL) {
-            *last_dot = '\0';
-        }
         snprintf(label_text, sizeof(label_text), "Selected file: %s", filename);
-        g_free(filename_copy);
     } else {
         strcpy(label_text, "No file selected");
     }
@@ -56,11 +51,13 @@ static void on_drag_data_received(GtkWidget *widget, GdkDragContext *context,
 static void on_csv_conversion(GtkWidget *widget, gpointer data) {
     if (!input_file_path) return;
     
+    char *base_name = remove_extension(input_file_path);
     char output_path[256];
-    snprintf(output_path, sizeof(output_path), "%s.csv", input_file_path);
+    snprintf(output_path, sizeof(output_path), "%s.csv", base_name);
     
     int result = TXTtoCSV(input_file_path, output_path);
     
+    free(base_name);
     if (result == 0) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL,
             GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -84,11 +81,13 @@ static void on_csv_conversion(GtkWidget *widget, gpointer data) {
 static void on_tsv_conversion(GtkWidget *widget, gpointer data) {
     if (!input_file_path) return;
     
+    char *base_name = remove_extension(input_file_path);
     char output_path[256];
-    snprintf(output_path, sizeof(output_path), "%s.tsv", input_file_path);
+    snprintf(output_path, sizeof(output_path), "%s.tsv", base_name);
     
     int result = TXTtoTSV(input_file_path, output_path);
     
+    free(base_name);
     if (result == 0) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL,
             GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -112,11 +111,13 @@ static void on_tsv_conversion(GtkWidget *widget, gpointer data) {
 static void on_txt_conversion(GtkWidget *widget, gpointer data) {
     if (!input_file_path) return;
     
+    char *base_name = remove_extension(input_file_path);
     char output_path[256];
-    snprintf(output_path, sizeof(output_path), "%s.txt", input_file_path);
+    snprintf(output_path, sizeof(output_path), "%s.txt", base_name);
     
     int result = BMPtoTXT(input_file_path, output_path);
     
+    free(base_name);
     if (result == 0) {
         GtkWidget *dialog = gtk_message_dialog_new(NULL,
             GTK_DIALOG_DESTROY_WITH_PARENT,
