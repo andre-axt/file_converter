@@ -6,6 +6,7 @@ static char *input_file_path = NULL;
 static GtkWidget *file_label;
 static GtkWidget *csv_button;
 static GtkWidget *tsv_button;
+static GtkWidget *txt_button;
 
 static void update_file_label(const char *filename) {
     char label_text[256];
@@ -24,6 +25,7 @@ static void update_file_label(const char *filename) {
     
     gtk_widget_set_sensitive(csv_button, filename != NULL);
     gtk_widget_set_sensitive(tsv_button, filename != NULL);
+    gtk_widget_set_sensitive(txt_button, filename != NULL);
 }
 
 static void on_drag_data_received(GtkWidget *widget, GdkDragContext *context, 
@@ -107,6 +109,34 @@ static void on_tsv_conversion(GtkWidget *widget, gpointer data) {
     }
 }
 
+static void on_txt_conversion(GtkWidget *widget, gpointer data) {
+    if (!input_file_path) return;
+    
+    char output_path[256];
+    snprintf(output_path, sizeof(output_path), "%s.txt", input_file_path);
+    
+    int result = BMPtoTXT(input_file_path, output_path);
+    
+    if (result == 0) {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_INFO,
+            GTK_BUTTONS_OK,
+            "File converted successfully to TXT!\nSaved as: %s",
+            output_path);
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    } else {
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            GTK_MESSAGE_ERROR,
+            GTK_BUTTONS_OK,
+            "Error converting file to TXT!");
+        gtk_dialog_run(GTK_DIALOG(dialog));
+        gtk_widget_destroy(dialog);
+    }
+}
+
 static void activate(GtkApplication *app, gpointer user_data) {
     GtkWidget *window;
     GtkWidget *vbox;
@@ -148,15 +178,19 @@ static void activate(GtkApplication *app, gpointer user_data) {
     
     csv_button = gtk_button_new_with_label("Convert to CSV");
     tsv_button = gtk_button_new_with_label("Convert to TSV");
+    txt_button = gtk_button_new_with_label("Convert to TXT");
     
     gtk_widget_set_sensitive(csv_button, FALSE);
     gtk_widget_set_sensitive(tsv_button, FALSE);
+    gtk_widget_set_sensitive(txt_button, FALSE);
     
     g_signal_connect(csv_button, "clicked", G_CALLBACK(on_csv_conversion), NULL);
     g_signal_connect(tsv_button, "clicked", G_CALLBACK(on_tsv_conversion), NULL);
+    g_signal_connect(txt_button, "clicked", G_CALLBACK(on_txt_conversion), NULL);
     
     gtk_container_add(GTK_CONTAINER(button_box), csv_button);
     gtk_container_add(GTK_CONTAINER(button_box), tsv_button);
+    gtk_container_add(GTK_CONTAINER(button_box), txt_button);
     
     gtk_box_pack_start(GTK_BOX(vbox), button_box, FALSE, FALSE, 0);
     
