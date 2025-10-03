@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "fileutils.h"
+#include <ctype.h>
 
 void writeFile(char *fileName){
     FILE *file = fopen(fileName, "w");
@@ -46,4 +47,36 @@ char* remove_extension(const char *filename) {
     }
     
     return result;
+}
+
+int get_file_type(const char *filename) {
+    if (filename == NULL) {
+        return FILE_TYPE_UNSUPPORTED;
+    }
+    
+    const char *extension = strrchr(filename, '.');
+    if (extension == NULL) {
+        return FILE_TYPE_UNSUPPORTED;
+    }
+    
+    extension++; 
+
+    char lower_ext[16];
+    int i;
+    for (i = 0; extension[i] && i < 15; i++) {
+        lower_ext[i] = tolower(extension[i]);
+    }
+    lower_ext[i] = '\0';
+    
+    if (strcmp(lower_ext, "txt") == 0) {
+        return FILE_TYPE_TXT;
+    } else if (strcmp(lower_ext, "bmp") == 0) {
+        return FILE_TYPE_BMP;
+    } else if (strcmp(lower_ext, "csv") == 0) {
+        return FILE_TYPE_CSV;
+    } else if (strcmp(lower_ext, "json") == 0) {
+        return FILE_TYPE_JSON;
+    }  
+    
+    return FILE_TYPE_UNSUPPORTED;
 }
